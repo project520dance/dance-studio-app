@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Logo } from "@/components/ui/Logo";
 import { registerWithEmail } from "@/services/authService";
+import { createUserProfile } from "@/services/userService";
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof FirebaseError) {
@@ -27,6 +28,8 @@ function getErrorMessage(error: unknown): string {
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -45,7 +48,15 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      await registerWithEmail(email, password);
+      const credential = await registerWithEmail(email, password);
+
+      await createUserProfile({
+        uid: credential.user.uid,
+        email: credential.user.email ?? email,
+        firstName,
+        lastName,
+      });
+
       router.push("/loading-account");
     } catch (registrationError) {
       setError(getErrorMessage(registrationError));
@@ -61,6 +72,28 @@ export default function RegisterPage() {
         <h1 className="mt-8 text-3xl font-bold tracking-tight">Create your account</h1>
         <p className="mt-2 text-sm text-slate-600">Join Project 520 and keep studio life organized.</p>
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Input
+              label="First name"
+              name="firstName"
+              autoComplete="given-name"
+              placeholder="First name"
+              value={firstName}
+              onChange={(event) => setFirstName(event.target.value)}
+              disabled={isLoading}
+              required
+            />
+            <Input
+              label="Last name"
+              name="lastName"
+              autoComplete="family-name"
+              placeholder="Last name"
+              value={lastName}
+              onChange={(event) => setLastName(event.target.value)}
+              disabled={isLoading}
+              required
+            />
+          </div>
           <Input
             label="Email address"
             name="email"

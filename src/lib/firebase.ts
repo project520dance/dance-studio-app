@@ -1,5 +1,6 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -11,9 +12,11 @@ const firebaseConfig = {
 };
 
 // Reuse the existing app during Next.js development hot reloads.
-export function getFirebaseAuth(): Auth {
-  const firebaseApp =
-    getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const firebaseApp =
+  getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
+export const db = getFirestore(firebaseApp);
+
+export function getFirebaseAuth(): Auth {
   return getAuth(firebaseApp);
 }
