@@ -6,6 +6,7 @@ import {
   type SnapshotOptions,
 } from "firebase/firestore";
 import type { Program } from "@/types/program";
+import type { ScheduleSeries } from "@/types/scheduleSeries";
 import type { Season } from "@/types/season";
 import type { StudioClass } from "@/types/studioClass";
 
@@ -43,3 +44,4 @@ function createDatedConverter<T extends DatedDocument>(): FirestoreDataConverter
 export const seasonConverter = createDatedConverter<Season>();
 export const programConverter = createDatedConverter<Program>();
 export const studioClassConverter = createDatedConverter<StudioClass>();
+export const scheduleSeriesConverter = createDatedConverter<ScheduleSeries>();

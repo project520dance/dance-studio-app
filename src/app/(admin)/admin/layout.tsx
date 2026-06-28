@@ -8,6 +8,7 @@ const navigation = [
   { label: "Seasons", href: "/admin/seasons" },
   { label: "Programs", href: "/admin/programs" },
   { label: "Classes", href: "/admin/classes" },
+  { label: "Schedule Series", href: "/admin/schedule-series" },
   { label: "Payments", href: "/admin/payments" },
   { label: "Invoices", href: "/admin/invoices" },
   { label: "Private Lessons", href: "/admin/privates" },
