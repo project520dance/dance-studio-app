@@ -1,4 +1,9 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
+import { logout } from "@/services/authService";
 
 type NavbarProps = {
   portalName: string;
@@ -6,7 +11,19 @@ type NavbarProps = {
 };
 
 export function Navbar({ portalName, userName }: NavbarProps) {
-  const menuItems = ["My Profile", "My Dancers", "Settings", "Logout"];
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const menuItems = ["My Profile", "My Dancers", "Settings"];
+
+  async function handleLogout() {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      router.push("/login");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  }
 
   return (
     <header className="border-b border-slate-200 bg-white">
@@ -35,7 +52,15 @@ export function Navbar({ portalName, userName }: NavbarProps) {
                   {item}
                 </button>
               ))}
-              <p className="px-3 py-2 text-xs text-slate-400">Coming soon</p>
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="block w-full rounded-lg px-3 py-2 text-left text-sm text-pink-600 hover:bg-pink-50 disabled:opacity-50"
+              >
+                {isLoggingOut ? "Logging out..." : "Logout"}
+              </button>
+              <p className="px-3 py-2 text-xs text-slate-400">Profile tools coming soon</p>
             </div>
           </details>
         </div>
