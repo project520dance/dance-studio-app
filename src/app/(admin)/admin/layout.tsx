@@ -5,6 +5,8 @@ const navigation = [
   { label: "Dashboard", href: "/admin" },
   { label: "Students", href: "/admin/students" },
   { label: "Teachers", href: "/admin/teachers" },
+  { label: "Seasons", href: "/admin/seasons" },
+  { label: "Programs", href: "/admin/programs" },
   { label: "Classes", href: "/admin/classes" },
   { label: "Payments", href: "/admin/payments" },
   { label: "Invoices", href: "/admin/invoices" },

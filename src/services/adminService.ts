@@ -7,10 +7,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { waitForCurrentUser } from "@/services/authService";
-import {
-  DEFAULT_STUDIO_ID,
-  getUserProfile,
-} from "@/services/userService";
+import { getUserProfile } from "@/services/userService";
 import type { Family } from "@/types/family";
 import type { Dancer } from "@/types/dancer";
 
@@ -27,7 +24,12 @@ export class AdminServiceError extends Error {
   }
 }
 
-async function requireAdmin(): Promise<void> {
+export type AdminContext = {
+  studioId: string;
+  userId: string;
+};
+
+export async function requireAdmin(): Promise<AdminContext> {
   const user = await waitForCurrentUser();
   if (!user) {
     throw new AdminServiceError(
@@ -41,29 +43,31 @@ async function requireAdmin(): Promise<void> {
       "You do not have permission to view the admin portal.",
     );
   }
+
+  return { studioId: profile.studioId, userId: user.uid };
 }
 
-function getFamiliesCollection() {
+function getFamiliesCollection(studioId: string) {
   return collection(
     db,
     "studios",
-    DEFAULT_STUDIO_ID,
+    studioId,
     "families",
   );
 }
 
-function getDancersCollection() {
+function getDancersCollection(studioId: string) {
   return collection(
     db,
     "studios",
-    DEFAULT_STUDIO_ID,
+    studioId,
     "dancers",
   );
 }
 
 export async function getAllFamilies(): Promise<Family[]> {
-  await requireAdmin();
-  const snapshot = await getDocs(getFamiliesCollection());
+  const { studioId } = await requireAdmin();
+  const snapshot = await getDocs(getFamiliesCollection(studioId));
 
   return snapshot.docs
     .map((document) => document.data() as Family)
@@ -71,8 +75,8 @@ export async function getAllFamilies(): Promise<Family[]> {
 }
 
 export async function getAllDancers(): Promise<Dancer[]> {
-  await requireAdmin();
-  const snapshot = await getDocs(getDancersCollection());
+  const { studioId } = await requireAdmin();
+  const snapshot = await getDocs(getDancersCollection(studioId));
 
   return snapshot.docs
     .map((document) => document.data() as Dancer)
@@ -84,10 +88,10 @@ export async function getAllDancers(): Promise<Dancer[]> {
 }
 
 export async function getAdminDashboardStats(): Promise<AdminDashboardStats> {
-  await requireAdmin();
+  const { studioId } = await requireAdmin();
 
-  const familiesCollection = getFamiliesCollection();
-  const dancersCollection = getDancersCollection();
+  const familiesCollection = getFamiliesCollection(studioId);
+  const dancersCollection = getDancersCollection(studioId);
   const activeDancersQuery = query(
     dancersCollection,
     where("status", "==", "active"),
