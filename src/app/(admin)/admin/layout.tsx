@@ -9,6 +9,7 @@ const navigation = [
   { label: "Programs", href: "/admin/programs" },
   { label: "Classes", href: "/admin/classes" },
   { label: "Schedule Series", href: "/admin/schedule-series" },
+  { label: "Schedule Events", href: "/admin/schedule-events" },
   { label: "Payments", href: "/admin/payments" },
   { label: "Invoices", href: "/admin/invoices" },
   { label: "Private Lessons", href: "/admin/privates" },

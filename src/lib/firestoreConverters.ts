@@ -6,6 +6,7 @@ import {
   type SnapshotOptions,
 } from "firebase/firestore";
 import type { Program } from "@/types/program";
+import type { ScheduleEvent } from "@/types/scheduleEvent";
 import type { ScheduleSeries } from "@/types/scheduleSeries";
 import type { Season } from "@/types/season";
 import type { StudioClass } from "@/types/studioClass";
@@ -45,3 +46,29 @@ export const seasonConverter = createDatedConverter<Season>();
 export const programConverter = createDatedConverter<Program>();
 export const studioClassConverter = createDatedConverter<StudioClass>();
 export const scheduleSeriesConverter = createDatedConverter<ScheduleSeries>();
+
+export const scheduleEventConverter: FirestoreDataConverter<ScheduleEvent> = {
+  toFirestore(value: ScheduleEvent): DocumentData {
+    return {
+      ...value,
+      startDateTime: Timestamp.fromDate(value.startDateTime),
+      endDateTime: Timestamp.fromDate(value.endDateTime),
+      createdAt: Timestamp.fromDate(value.createdAt),
+      updatedAt: Timestamp.fromDate(value.updatedAt),
+    };
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions,
+  ): ScheduleEvent {
+    const data = snapshot.data(options);
+    return {
+      ...data,
+      id: snapshot.id,
+      startDateTime: (data.startDateTime as Timestamp).toDate(),
+      endDateTime: (data.endDateTime as Timestamp).toDate(),
+      createdAt: (data.createdAt as Timestamp).toDate(),
+      updatedAt: (data.updatedAt as Timestamp).toDate(),
+    } as unknown as ScheduleEvent;
+  },
+};
