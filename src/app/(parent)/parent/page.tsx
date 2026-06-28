@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DashboardCard } from "@/components/dashboard/DashboardCard";
+import { DancerAvatar } from "@/components/dancers/DancerAvatar";
 import {
   DashboardServiceError,
   getParentDashboard,
@@ -116,7 +117,10 @@ export default function ParentPage() {
         <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {dashboard.dancers.map((dancer) => (
             <article key={dancer.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <span className="flex size-11 items-center justify-center rounded-xl bg-pink-100 text-xl" aria-hidden="true">🩰</span>
+              <DancerAvatar
+                name={`${dancer.firstName} ${dancer.lastName}`}
+                photoUrl={dancer.photoUrl}
+              />
               <h3 className="mt-4 text-lg font-semibold">
                 {dancer.firstName} {dancer.lastName}
               </h3>

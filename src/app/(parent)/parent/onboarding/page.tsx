@@ -256,45 +256,43 @@ export default function ParentOnboardingPage() {
             <Input
               label="Medical conditions"
               name="medicalConditions"
-              placeholder="Enter none if not applicable"
+              placeholder="Optional"
               value={activeDancer.medicalConditions}
               onChange={(event) =>
                 updateDancer("medicalConditions", event.target.value)
               }
-              required
             />
             <Input
               label="Current medications"
               name="currentMedications"
-              placeholder="Enter none if not applicable"
+              placeholder="Optional"
               value={activeDancer.currentMedications}
               onChange={(event) =>
                 updateDancer("currentMedications", event.target.value)
               }
-              required
             />
             <Input
               label="Physician"
               name="physician"
+              placeholder="Optional"
               value={activeDancer.physician}
               onChange={(event) =>
                 updateDancer("physician", event.target.value)
               }
-              required
             />
             <Input
               label="Allergies"
               name="allergies"
-              placeholder="Enter none if not applicable"
+              placeholder="Optional"
               value={activeDancer.allergies}
               onChange={(event) =>
                 updateDancer("allergies", event.target.value)
               }
-              required
             />
             <Input
               label="Additional notes"
               name="additionalNotes"
+              placeholder="Optional"
               value={activeDancer.additionalNotes}
               onChange={(event) =>
                 updateDancer("additionalNotes", event.target.value)

@@ -1,9 +1,11 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   serverTimestamp,
+  writeBatch,
   where,
   type WriteBatch,
 } from "firebase/firestore";
@@ -43,6 +45,8 @@ export function addDancerToBatch(
     physician: input.physician.trim(),
     allergies: input.allergies.trim(),
     additionalNotes: input.additionalNotes.trim(),
+    photoUrl: null,
+    teamId: null,
     status: "active",
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -61,4 +65,29 @@ export async function getDancersByFamilyId(
   const snapshot = await getDocs(dancersQuery);
 
   return snapshot.docs.map((document) => document.data() as Dancer);
+}
+
+export async function getDancerById(
+  dancerId: string,
+): Promise<Dancer | null> {
+  const dancerDocument = doc(
+    db,
+    "studios",
+    DEFAULT_STUDIO_ID,
+    "dancers",
+    dancerId,
+  );
+  const snapshot = await getDoc(dancerDocument);
+
+  return snapshot.exists() ? (snapshot.data() as Dancer) : null;
+}
+
+export async function createDancer(
+  input: CreateDancerInput,
+): Promise<string> {
+  const batch = writeBatch(db);
+  const dancerId = addDancerToBatch(batch, input);
+
+  await batch.commit();
+  return dancerId;
 }

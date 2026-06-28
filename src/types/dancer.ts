@@ -14,6 +14,8 @@ export type Dancer = {
   physician: string;
   allergies: string;
   additionalNotes: string;
+  photoUrl: string | null;
+  teamId: string | null;
   status: DancerStatus;
   createdAt: Timestamp | null;
   updatedAt: Timestamp | null;
