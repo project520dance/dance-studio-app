@@ -43,6 +43,7 @@ export default function ScheduleEventsPage() {
     <CatalogList
       title="Schedule Events"
       description="View generated dated schedule occurrences."
+      baseHref="/admin/schedule-events"
       items={items}
       loading={loading}
       error={error}

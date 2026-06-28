@@ -49,3 +49,12 @@ export type ScheduleEvent = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type ScheduleEventUpdateInput = Pick<
+  ScheduleEvent,
+  | "roomId"
+  | "notes"
+  | "publicNotes"
+  | "isVisibleToParents"
+  | "displayOrder"
+>;
