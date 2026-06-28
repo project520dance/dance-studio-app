@@ -29,6 +29,7 @@ Project 520 is a modern dance studio management platform for parents, teachers, 
 - [Firestore Structure](./FIRESTORE_STRUCTURE.md)
 - [Architecture](./ARCHITECTURE.md)
 - [Architecture Decisions](./DECISIONS.md)
+- [Schedule Events](./SCHEDULE_EVENTS.md)
 - [UI Style Guide](./UI_STYLE_GUIDE.md)
 - [Coding Standards](./CODING_STANDARDS.md)
 - [Contributing](./CONTRIBUTING.md)

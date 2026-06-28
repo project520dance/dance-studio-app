@@ -31,6 +31,22 @@ Pages render UI and manage local state. Portal services coordinate workflows. Do
 
 Current orchestration services include `dashboardService`, `parentDancerService`, `adminService`, and `onboardingService`. Domain services include `authService`, `userService`, `familyService`, and `dancerService`.
 
+## Schedule Events
+
+Schedule Event pages and components use a dedicated domain service:
+
+```text
+Schedule Event pages and editor
+  → scheduleEventService
+  → Firestore scheduleEvents collection
+```
+
+The service owns studio scoping, authorization, relationship validation, date conversion, status transitions, cancellation, rescheduling, and parent-safe reads.
+
+Internal `notes` and parent-safe `publicNotes` remain separate. Parent-facing services must omit internal notes even when `isVisibleToParents` is true.
+
+See [Schedule Events](./SCHEDULE_EVENTS.md) for the complete Version 0.6.1 design.
+
 ## Authentication Flow
 
 ```text

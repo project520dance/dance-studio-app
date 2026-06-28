@@ -38,6 +38,14 @@ The roadmap describes product direction, not fixed delivery dates. Security, acc
 - Announcements and communication
 - Notification preferences
 
+## Version 0.6.1 — Planned
+
+- Schedule Event domain and Firestore model
+- Manual Schedule Event administration
+- Cancellation and rescheduling foundations
+- Parent visibility and future teacher-assignment fields
+- Attendance relationship design
+
 ## Version 0.7 — Planned
 
 - Family billing, invoices, and tuition

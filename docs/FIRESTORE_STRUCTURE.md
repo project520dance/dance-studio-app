@@ -28,6 +28,8 @@ studios/{studioId}
 ├── classes
 ├── enrollments
 ├── teachers
+├── scheduleSeries
+├── scheduleEvents
 ├── attendance
 ├── announcements
 ├── invoices
@@ -50,6 +52,14 @@ Family waivers are planned at `studios/{studioId}/families/{familyId}/waivers/{w
 - Use server timestamps.
 - Add indexes only for real queries.
 
+Schedule Event queries will eventually filter by combinations of:
+
+- `startDateTime`
+- `status`
+- `classId`
+- `seasonId`
+- `isVisibleToParents`
+
 ## Security
 
 Firestore Security Rules must enforce user, family, role, and studio access. Client checks improve UX but are not a security boundary. Rules should be covered by Firebase Emulator tests before production.
@@ -61,3 +71,5 @@ Firestore Security Rules must enforce user, family, role, and studio access. Cli
 - Dancers reference families.
 - Birthdates are stored; ages are calculated.
 - Unbounded data belongs in collections, not arrays.
+- Schedule Series defines recurrence; Schedule Events are dated occurrences.
+- Attendance references Schedule Events as separate records.
