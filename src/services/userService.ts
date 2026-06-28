@@ -3,11 +3,12 @@ import {
   getDoc,
   serverTimestamp,
   setDoc,
+  type WriteBatch,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { UserProfile } from "@/types/user";
 
-const STUDIO_ID =
+export const DEFAULT_STUDIO_ID =
   process.env.NEXT_PUBLIC_DEFAULT_STUDIO_ID ?? "project520";
 
 type CreateUserProfileInput = {
@@ -18,7 +19,7 @@ type CreateUserProfileInput = {
 };
 
 function getUserDocument(uid: string) {
-  return doc(db, "studios", STUDIO_ID, "users", uid);
+  return doc(db, "studios", DEFAULT_STUDIO_ID, "users", uid);
 }
 
 export async function createUserProfile({
@@ -37,7 +38,8 @@ export async function createUserProfile({
     lastName: normalizedLastName,
     displayName: `${normalizedFirstName} ${normalizedLastName}`.trim(),
     role: "parent",
-    studioId: STUDIO_ID,
+    studioId: DEFAULT_STUDIO_ID,
+    familyId: null,
     status: "active",
     onboardingComplete: false,
     createdAt: serverTimestamp(),
@@ -55,4 +57,16 @@ export async function getUserProfile(
   }
 
   return snapshot.data() as UserProfile;
+}
+
+export function addOnboardingCompletionToBatch(
+  batch: WriteBatch,
+  uid: string,
+  familyId: string,
+): void {
+  batch.update(getUserDocument(uid), {
+    familyId,
+    onboardingComplete: true,
+    updatedAt: serverTimestamp(),
+  });
 }

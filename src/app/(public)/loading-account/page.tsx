@@ -39,7 +39,11 @@ export default function LoadingAccountPage() {
         }
 
         if (profile.role === "parent") {
-          router.replace("/parent");
+          router.replace(
+            profile.onboardingComplete
+              ? "/parent"
+              : "/parent/onboarding",
+          );
           return;
         }
 

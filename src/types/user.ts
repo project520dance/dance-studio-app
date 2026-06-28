@@ -15,6 +15,7 @@ export type UserProfile = {
   displayName: string;
   role: UserRole;
   studioId: string;
+  familyId: string | null;
   status: UserStatus;
   onboardingComplete: boolean;
   createdAt: Timestamp | null;
