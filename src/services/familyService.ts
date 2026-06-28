@@ -1,12 +1,13 @@
 import {
   collection,
   doc,
+  getDoc,
   serverTimestamp,
   type WriteBatch,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { DEFAULT_STUDIO_ID } from "@/services/userService";
-import type { EmergencyContact } from "@/types/family";
+import type { EmergencyContact, Family } from "@/types/family";
 
 export type CreateFamilyInput = {
   primaryParentUserId: string;
@@ -40,4 +41,19 @@ export function addFamilyToBatch(
   });
 
   return familyDocument.id;
+}
+
+export async function getFamilyById(
+  familyId: string,
+): Promise<Family | null> {
+  const familyDocument = doc(
+    db,
+    "studios",
+    DEFAULT_STUDIO_ID,
+    "families",
+    familyId,
+  );
+  const snapshot = await getDoc(familyDocument);
+
+  return snapshot.exists() ? (snapshot.data() as Family) : null;
 }

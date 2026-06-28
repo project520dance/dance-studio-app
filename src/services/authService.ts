@@ -37,3 +37,12 @@ export function subscribeToAuthState(
 ): Unsubscribe {
   return onAuthStateChanged(getFirebaseAuth(), observer);
 }
+
+export async function waitForCurrentUser(): Promise<User | null> {
+  const auth = getFirebaseAuth();
+
+  // Wait for Firebase to restore any persisted authentication session.
+  await auth.authStateReady();
+
+  return auth.currentUser;
+}
