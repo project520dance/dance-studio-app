@@ -1,11 +1,11 @@
 import type { Timestamp } from "firebase/firestore";
 
-export type DancerStatus = "active";
+export type DancerStatus = "active" | "archived";
 
 export type Dancer = {
   id: string;
   studioId: string;
-  familyId: string;
+  familyId: string | null;
   firstName: string;
   lastName: string;
   birthdate: string;
