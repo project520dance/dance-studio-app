@@ -65,6 +65,18 @@ export function addDays(date: string, days: number) {
   return value.toISOString().slice(0, 10);
 }
 
+export function datesInRangeInclusive(startDate: string, endDate: string) {
+  validateDate(startDate, "Start date");
+  validateDate(endDate, "End date");
+  const dates: string[] = [];
+
+  for (let date = startDate; date <= endDate; date = addDays(date, 1)) {
+    dates.push(date);
+  }
+
+  return dates;
+}
+
 export function dayOfWeek(date: string) {
   validateDate(date, "Date");
   return [
@@ -76,6 +88,10 @@ export function dayOfWeek(date: string) {
     "friday",
     "saturday",
   ][new Date(`${date}T00:00:00Z`).getUTCDay()];
+}
+
+export function matchesDayOfWeek(date: string, expectedDay: string) {
+  return dayOfWeek(date) === expectedDay.trim().toLowerCase();
 }
 
 export function localDateTimeToDate(date: string, time: string, timeZone: string) {

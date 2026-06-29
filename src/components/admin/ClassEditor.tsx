@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
@@ -136,6 +137,11 @@ export function ClassEditor({ classId }: { classId?: string }) {
         <div className="flex flex-wrap gap-3">
           <Button disabled={saving}>{saving ? "Saving…" : "Save class"}</Button>
           {classId && value.status !== "archived" && <Button type="button" variant="secondary" disabled={saving} onClick={archive}>Archive</Button>}
+          {classId && (
+            <Link className="inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700" href={`/admin/classes/${classId}/enrollments`}>
+              Manage enrollments
+            </Link>
+          )}
         </div>
       </form>
     </section>

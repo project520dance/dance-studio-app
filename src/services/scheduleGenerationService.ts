@@ -27,8 +27,9 @@ import type { Program } from "@/types/program";
 import type { StudioClass } from "@/types/studioClass";
 import {
   addDays,
-  dayOfWeek,
+  datesInRangeInclusive,
   localDateTimeToDate,
+  matchesDayOfWeek,
   todayInTimeZone,
   validateDate,
   validateTime,
@@ -119,12 +120,11 @@ function buildCandidates({
 
   if (generationStart > generationEnd) return { candidates, horizonEnd };
 
-  for (
-    let occurrenceDate = generationStart;
-    occurrenceDate <= generationEnd;
-    occurrenceDate = addDays(occurrenceDate, 1)
-  ) {
-    if (dayOfWeek(occurrenceDate) !== series.dayOfWeek) continue;
+  for (const occurrenceDate of datesInRangeInclusive(
+    generationStart,
+    generationEnd,
+  )) {
+    if (!matchesDayOfWeek(occurrenceDate, series.dayOfWeek)) continue;
     const occurrenceKey = `${series.id}_${occurrenceDate}`;
     const now = new Date();
     const event: ScheduleEvent = {

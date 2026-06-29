@@ -6,6 +6,7 @@ import {
   type SnapshotOptions,
 } from "firebase/firestore";
 import type { AttendanceRecord } from "@/types/attendance";
+import type { Enrollment } from "@/types/enrollment";
 import type { Program } from "@/types/program";
 import type { ScheduleEvent } from "@/types/scheduleEvent";
 import type { ScheduleSeries } from "@/types/scheduleSeries";
@@ -97,5 +98,31 @@ export const attendanceConverter: FirestoreDataConverter<AttendanceRecord> = {
       createdAt: (data.createdAt as Timestamp).toDate(),
       updatedAt: (data.updatedAt as Timestamp).toDate(),
     } as unknown as AttendanceRecord;
+  },
+};
+
+export const enrollmentConverter: FirestoreDataConverter<Enrollment> = {
+  toFirestore(value: Enrollment): DocumentData {
+    return {
+      ...value,
+      enrolledAt: Timestamp.fromDate(value.enrolledAt),
+      lastStatusChangedAt: Timestamp.fromDate(value.lastStatusChangedAt),
+      createdAt: Timestamp.fromDate(value.createdAt),
+      updatedAt: Timestamp.fromDate(value.updatedAt),
+    };
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions,
+  ): Enrollment {
+    const data = snapshot.data(options);
+    return {
+      ...data,
+      id: snapshot.id,
+      enrolledAt: (data.enrolledAt as Timestamp).toDate(),
+      lastStatusChangedAt: (data.lastStatusChangedAt as Timestamp).toDate(),
+      createdAt: (data.createdAt as Timestamp).toDate(),
+      updatedAt: (data.updatedAt as Timestamp).toDate(),
+    } as unknown as Enrollment;
   },
 };
