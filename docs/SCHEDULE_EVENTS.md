@@ -203,6 +203,8 @@ Attendance must not be stored as an unbounded array inside a Schedule Event. Can
 
 Attendance records and attendance UI are not part of Version 0.6.1.
 
+Version 0.7.0 temporarily loads all active dancers. Future versions will load enrolled class rosters without changing the Attendance schema.
+
 ## Admin Routes
 
 ```text

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -42,6 +43,7 @@ export function ScheduleEventEditor({ eventId }: { eventId: string }) {
   const [className, setClassName] = useState("");
   const [showCancellation, setShowCancellation] = useState(false);
   const [cancellationReason, setCancellationReason] = useState("");
+  const [currentTime, setCurrentTime] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -55,6 +57,7 @@ export function ScheduleEventEditor({ eventId }: { eventId: string }) {
     ]).then(([item, seasons, programs, classes]) => {
       if (!item) throw new Error("Schedule event not found.");
       setEvent(item);
+      setCurrentTime(Date.now());
       setValue({
         roomId: item.roomId,
         notes: item.notes,
@@ -111,6 +114,12 @@ export function ScheduleEventEditor({ eventId }: { eventId: string }) {
     dateStyle: "full",
     timeStyle: "short",
   }).format(event.endDateTime);
+  const attendanceEligibleStatus = (
+    event.eventType === "class"
+    && (event.status === "scheduled" || event.status === "completed")
+  );
+  const attendanceHasStarted = event.startDateTime.getTime() <= currentTime;
+  const canTakeAttendance = attendanceEligibleStatus && attendanceHasStarted;
 
   return (
     <section className="mx-auto max-w-2xl">
@@ -135,6 +144,23 @@ export function ScheduleEventEditor({ eventId }: { eventId: string }) {
         <div><dt className="text-sm font-medium text-slate-500">Ends</dt><dd className="mt-1">{ends}</dd></div>
         <div className="sm:col-span-2"><dt className="text-sm font-medium text-slate-500">Schedule Series</dt><dd className="mt-1 break-all">{event.scheduleSeriesId ?? "None"}</dd></div>
       </dl>
+
+      <div className="mt-6">
+        {canTakeAttendance ? (
+          <Link className="inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50" href={`/admin/schedule-events/${eventId}/attendance`}>
+            Take attendance
+          </Link>
+        ) : (
+          <span aria-disabled="true" className="inline-flex min-h-11 cursor-not-allowed items-center justify-center rounded-lg border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-400">
+            Take attendance
+          </span>
+        )}
+        {attendanceEligibleStatus && !attendanceHasStarted && (
+          <p className="mt-2 text-sm text-slate-500">
+            Attendance opens after the event start time.
+          </p>
+        )}
+      </div>
 
       <form onSubmit={submit} className="mt-6 space-y-5 rounded-2xl border border-slate-200 bg-white p-6">
         <Select label="Room" disabled={archived || saving} value={value.roomId} onChange={(inputEvent) => setValue({ ...value, roomId: inputEvent.target.value as ScheduleEventUpdateInput["roomId"] })}>

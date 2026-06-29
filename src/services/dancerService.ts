@@ -91,3 +91,21 @@ export async function createDancer(
   await batch.commit();
   return dancerId;
 }
+
+export async function getActiveDancersForStudio(
+  studioId: string,
+): Promise<Dancer[]> {
+  const activeDancersQuery = query(
+    collection(db, "studios", studioId, "dancers"),
+    where("status", "==", "active"),
+  );
+  const snapshot = await getDocs(activeDancersQuery);
+
+  return snapshot.docs
+    .map((document) => document.data() as Dancer)
+    .sort((a, b) =>
+      `${a.lastName} ${a.firstName}`.localeCompare(
+        `${b.lastName} ${b.firstName}`,
+      ),
+    );
+}

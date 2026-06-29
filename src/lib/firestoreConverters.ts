@@ -5,6 +5,7 @@ import {
   type QueryDocumentSnapshot,
   type SnapshotOptions,
 } from "firebase/firestore";
+import type { AttendanceRecord } from "@/types/attendance";
 import type { Program } from "@/types/program";
 import type { ScheduleEvent } from "@/types/scheduleEvent";
 import type { ScheduleSeries } from "@/types/scheduleSeries";
@@ -70,5 +71,31 @@ export const scheduleEventConverter: FirestoreDataConverter<ScheduleEvent> = {
       createdAt: (data.createdAt as Timestamp).toDate(),
       updatedAt: (data.updatedAt as Timestamp).toDate(),
     } as unknown as ScheduleEvent;
+  },
+};
+
+export const attendanceConverter: FirestoreDataConverter<AttendanceRecord> = {
+  toFirestore(value: AttendanceRecord): DocumentData {
+    return {
+      ...value,
+      recordedAt: Timestamp.fromDate(value.recordedAt),
+      lastModifiedAt: Timestamp.fromDate(value.lastModifiedAt),
+      createdAt: Timestamp.fromDate(value.createdAt),
+      updatedAt: Timestamp.fromDate(value.updatedAt),
+    };
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions,
+  ): AttendanceRecord {
+    const data = snapshot.data(options);
+    return {
+      ...data,
+      id: snapshot.id,
+      recordedAt: (data.recordedAt as Timestamp).toDate(),
+      lastModifiedAt: (data.lastModifiedAt as Timestamp).toDate(),
+      createdAt: (data.createdAt as Timestamp).toDate(),
+      updatedAt: (data.updatedAt as Timestamp).toDate(),
+    } as unknown as AttendanceRecord;
   },
 };
